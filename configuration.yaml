@@ -1,0 +1,14 @@
+config:
+  paths:
+    source: ./test/downloads
+    target: ./test/volume1/videos
+  media-types:
+    video: mp4|smi|avi|wmv|mkv
+  operations:
+    file:
+      action: copy
+      overwrite: true
+
+tags:
+  simple: 테스트,예제
+
