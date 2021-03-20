@@ -38,3 +38,7 @@ cd eurasian-otter-main/
 vi configuration.yaml
 ./start.sh
 ```
+
+### 주의사항
+- DSM 스케줄러에 등록 시 다음과 같이 등록을 해야 한다.
+  - `/파일이 있는 절대경로/script/eurasian-otter-main && ./start.sh`
