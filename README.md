@@ -21,7 +21,7 @@ Synology file automate moving application
             video: 이동 시킬 파일의 확장자명 '|'를 이용해 더 추가 한다.
          operations:
             file:
-               action: copy or move source 위치에 원본 파일을 두고 복사를 하거나 아예 이동을 시키는 옵션이다.
+               action: copy or move source 위치에 원본 파일을 두고 복사를 하거나 아예 이동을 시키는 옵션이다.Cancel Changes
                overwrite: true or false 만약 target path에 이미 동일한 이름의 파일이 있는 경우 덮어쓰기 할지 정한다.
       tags:
          simple:이동 or 복사시킬 파일명을 정한다 , 를 이용해 나열한다.                
@@ -41,4 +41,4 @@ vi configuration.yaml
 
 ### 주의사항
 - DSM 스케줄러에 등록 시 다음과 같이 등록을 해야 한다.
-  - `/파일이 있는 절대경로/script/eurasian-otter-main && ./start.sh`
+  - `cd /파일이 있는 절대경로/script/eurasian-otter-main && ./start.sh`
