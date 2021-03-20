@@ -152,3 +152,4 @@ fabric.properties
 
 # log
 *.log
+/test

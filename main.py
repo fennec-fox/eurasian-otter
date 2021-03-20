@@ -9,10 +9,6 @@ import os
 import re
 import logging.config
 import shutil
-import sys
-
-reload(sys)
-sys.setdefaultencoding('utf-8')
 
 loggingConfigPath = 'logging.yaml'
 if os.path.exists(loggingConfigPath):
@@ -42,7 +38,7 @@ def search_files(word):
         # print path to all filenames.
         for filename in file_names:
             file_full_path = os.path.join(dir_name, filename)
-            matched = bool(re.match(_pattern, file_full_path))
+            matched = bool(re.match(_pattern, file_full_path.encode("utf-8")))
             if matched:
                 logging.debug('matched_path=%s', file_full_path)
                 _found_files.append(file_full_path)
