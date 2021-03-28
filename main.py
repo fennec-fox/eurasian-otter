@@ -8,7 +8,8 @@ import yaml
 import os
 import logging.config
 import shutil
-from tag_detector import TagDetector
+from tag_detector import SimpleTagDetector
+from tag_detector import SeriesTagDetector
 
 loggingConfigPath = 'logging.yaml'
 if os.path.exists(loggingConfigPath):
@@ -69,22 +70,24 @@ if __name__ == '__main__':
         app_config = yaml.load(f, Loader=yaml.FullLoader)
 
     logging.info("- processing simple tags")
-    tagDetector = TagDetector(app_config)
+    simpleTagDetector = SimpleTagDetector(app_config)
 
-    tags = tagDetector.find_simple_tags()
+    tags = simpleTagDetector.find_tags()
     for tag in tags:
         path_of_target_folder = create_or_nothing_folder(tag)
         logging.debug("-- target: %s ----", tag)
-        files = tagDetector.find_files(tag)
+        files = simpleTagDetector.find_files(tag)
         for target_file in files:
             copy_or_move_file(target_file, path_of_target_folder)
 
     logging.info("- processing series tags")
     if bool(app_config['tags']['series']['auto-detect']):
-        tags = tagDetector.find_series_tags()
+        seriesTagDetector = SeriesTagDetector(app_config)
+
+        tags = seriesTagDetector.find_tags()
         for tag in tags:
             path_of_target_folder = create_or_nothing_folder(tag)
             logging.debug("-- target: %s ----", tag)
-            files = tagDetector.find_files(tag)
+            files = seriesTagDetector.find_files(tag)
             for target_file in files:
                 copy_or_move_file(target_file, path_of_target_folder)
