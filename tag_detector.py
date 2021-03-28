@@ -13,8 +13,7 @@ class TagDetector:
         return self.app_config["tags"]["simple"].split(',')
 
     def find_series_tags(self):
-
-        _pattern = r'(.*)(E\d{1,2})|(S\d{1,2})'
+        _pattern = r'(.*)((E\d{1,2})|(S\d{1,2}))'
         _found_tags = []
 
         for dir_name, dir_names, file_names in os.walk(self.path_of_source):
