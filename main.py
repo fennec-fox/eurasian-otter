@@ -6,9 +6,9 @@
 
 import yaml
 import os
-import re
 import logging.config
 import shutil
+from tag_detector import TagDetector
 
 loggingConfigPath = 'logging.yaml'
 if os.path.exists(loggingConfigPath):
@@ -22,27 +22,6 @@ else:
         format='%(asctime)s:%(levelname)s:%(funcName)s:%(message)s',
         datefmt='%Y-%m-%d %H:%M:%S'
     )
-
-
-def get_tags_by_simple():
-    return app_config["tags"]["simple"].split(',')
-
-
-def search_files(word):
-    _path_of_source = app_config['config']['paths']['source']
-    _media_types = app_config['config']['media-types']['video']
-    _pattern = (".*%s*.*(%s)$" % (word, _media_types)).encode("utf-8")
-    _found_files = []
-
-    for dir_name, dir_names, file_names in os.walk(_path_of_source):
-        # print path to all filenames.
-        for filename in file_names:
-            file_full_path = os.path.join(dir_name, filename)
-            matched = bool(re.match(_pattern, file_full_path.encode("utf-8")))
-            if matched:
-                logging.debug('matched_path=%s', file_full_path)
-                _found_files.append(file_full_path)
-    return _found_files
 
 
 def create_or_nothing_folder(word):
@@ -89,10 +68,23 @@ if __name__ == '__main__':
     with open('configuration.yaml') as f:
         app_config = yaml.load(f, Loader=yaml.FullLoader)
 
-    tags = get_tags_by_simple()
+    logging.info("- processing simple tags")
+    tagDetector = TagDetector(app_config)
+
+    tags = tagDetector.find_simple_tags()
     for tag in tags:
         path_of_target_folder = create_or_nothing_folder(tag)
         logging.debug("-- target: %s ----", tag)
-        files = search_files(tag)
+        files = tagDetector.find_files(tag)
         for target_file in files:
             copy_or_move_file(target_file, path_of_target_folder)
+
+    logging.info("- processing series tags")
+    if bool(app_config['tags']['series']['auto-detect']):
+        tags = tagDetector.find_series_tags()
+        for tag in tags:
+            path_of_target_folder = create_or_nothing_folder(tag)
+            logging.debug("-- target: %s ----", tag)
+            files = tagDetector.find_files(tag)
+            for target_file in files:
+                copy_or_move_file(target_file, path_of_target_folder)

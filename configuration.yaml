@@ -10,5 +10,7 @@ config:
       overwrite: true
 
 tags:
-  simple: 테스트,예제
+  simple: 예제
+  series:
+    auto-detect: true
 
